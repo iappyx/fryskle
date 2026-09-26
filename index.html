@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="fy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fryskle: it deistige Fryske wurdspul</title>
+<meta name="description" content="Rie alle dagen in Frysk wurd fan 4, 5, 6 of 7 letters. Fergees wurdspul mei de offisjele Foarkarswurdlist.">
+<link rel="canonical" href="https://iappyx.github.io/fryskle/">
+<!-- Link previews (WhatsApp, Telegram, …); image made with preview/make_og_image.sh -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fryskle">
+<meta property="og:locale" content="fy_NL">
+<meta property="og:title" content="Fryskle: it deistige Fryske wurdspul">
+<meta property="og:description" content="Rie alle dagen in Frysk wurd fan 4, 5, 6 of 7 letters. Fergees wurdspul mei de offisjele Foarkarswurdlist.">
+<meta property="og:url" content="https://iappyx.github.io/fryskle/">
+<meta property="og:image" content="https://iappyx.github.io/fryskle/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fryskle: in spulbord mei blauwe, giele en grize fakjes en it Fryske wurd fûgel.">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Structured data for search engines -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Fryskle",
+ "alternateName": "Fryskle: it deistige Fryske wurdspul",
+ "url": "https://iappyx.github.io/fryskle/",
+ "description": "Rie alle dagen in Frysk wurd fan 4, 5, 6 of 7 letters. Fergees wurdspul mei de offisjele Foarkarswurdlist.",
+ "inLanguage": "fy",
+ "applicationCategory": "GameApplication",
+ "operatingSystem": "Any (web browser)",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "EUR"
+ },
+ "author": {
+  "@type": "Person",
+  "name": "iappyx",
+  "url": "https://github.com/iappyx"
+ },
+ "image": "https://iappyx.github.io/fryskle/og-image.jpg"
+}
+</script>
+<meta name="theme-color" content="#1D5AA8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231D5AA8'/%3E%3Cg transform='translate(16 16.5) scale(0.82) translate(-1.5 1.5)'%3E%3Cpath d='M0,12A16.143,16.143 0 0,1 -14,-4A7,8 0 0,1 -7,-12A6,8 0 0,1 -1,-5A1,1 0 1,0 1,-5A6,8 0 0,1 7,-12A7,8 0 0,1 14,-4A16.143,16.143 0 0,1 0,12z' fill='%23E23B3B' transform='rotate(34.695)'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D;
+    --muted: #5B6880;
+    --bg: #F3F6FA;
+    --surface: #FFFFFF;
+    --line: #C7D1DE;
+    --key: #DDE4EE;
+    --key-accent: #CFDCEE;
+    --blue: #1D5AA8;
+    --amber: #E0A11B;
+    --grey: #7A8699;
+    --red: #E23B3B;
+    --on-color: #FFFFFF;
+    --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+    --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --cols: 5;   /* word length, set by the script */
+    --tile: min(62px, calc((100vw - 48px) / (var(--cols) + 0.4)), calc((100dvh - 414px) / 6.6));
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #E7EDF6;
+      --muted: #A3B0C4;
+      --bg: #0F1A2B;
+      --surface: #17243A;
+      --line: #34445E;
+      --key: #2A3A55;
+      --key-accent: #2F4670;
+      --blue: #3C7DD8;
+      --amber: #D69E27;
+      --grey: #4A5770;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }   /* hidden must win over display: flex rules */
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    display: flex;
+    flex-direction: column;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+  /* Header with Frisian flag bands */
+  .top {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 12px 6px;
+  }
+  .top h1 {
+    margin: 0;
+    text-align: center;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  .top h1 svg { width: 22px; height: 22px; flex: none; }
+  .icon-btn {
+    width: 40px; height: 40px;
+    border: 0; border-radius: 50%;
+    background: transparent;
+    display: grid; place-items: center;
+  }
+  .icon-btn:hover { background: var(--key); }
+  .icon-btn svg { width: 22px; height: 22px; }
+  .flagstrip {
+    height: 10px;
+    flex: none;
+    background: repeating-linear-gradient(-150deg, var(--blue) 0 22px, var(--surface) 22px 44px);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Mode switcher: 4, 5, 6 or 7 letters */
+  .modes { display: flex; justify-content: center; gap: 6px; padding: 10px 8px 0; }
+  .modes button {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+    padding: 5px 14px; font-weight: 600; font-size: 0.9rem; color: var(--muted);
+  }
+  .modes button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* Help tools between board and keyboard: inspiration, hint, word finder */
+  .tools { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tools button {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+    padding: 5px 12px; font-size: 0.85rem; font-weight: 600; color: var(--ink);
+  }
+  .tools button:disabled { opacity: 0.55; cursor: default; }
+  .hintline { min-height: 1.2em; margin-top: 6px; font-size: 0.85rem; color: var(--muted); text-align: center; }
+  .hintline b { color: var(--ink); text-transform: uppercase; }
+  .hintline a { color: var(--blue); font-weight: 600; }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 12px 8px 8px;
+    min-height: 0;
+  }
+
+  /* Board */
+  #board {
+    display: grid;
+    grid-template-rows: repeat(6, var(--tile));
+    gap: 6px;
+    margin: auto 0;
+  }
+  .row { display: grid; grid-template-columns: repeat(var(--cols), var(--tile)); gap: 6px; }
+  .row.shake { animation: shake 0.4s; }
+  .tile {
+    display: grid; place-items: center;
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: calc(var(--tile) * 0.52);
+    text-transform: lowercase;
+    line-height: 1;
+    user-select: none;
+  }
+  .tile.filled { border-color: var(--muted); animation: pop 0.1s; }
+  .tile[data-state] { border-color: transparent; color: var(--on-color); }
+  .tile[data-state="correct"] { background: var(--blue); }
+  .tile[data-state="present"] { background: var(--amber); }
+  .tile[data-state="absent"] { background: var(--grey); }
+  .tile.flip { animation: flip 0.5s ease-in-out; }
+  .row.win .tile { animation: bounce 0.5s ease; }
+
+  @keyframes pop { 50% { transform: scale(1.08); } }
+  @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+  @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+  @keyframes bounce { 40% { transform: translateY(-14px); } 70% { transform: translateY(2px); } }
+
+  /* Keyboard */
+  #keyboard { width: 100%; display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+  .krow { display: flex; justify-content: center; gap: 5px; }
+  .key {
+    flex: 1 1 0;
+    max-width: 46px;
+    height: 54px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--key);
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-transform: lowercase;
+    display: grid; place-items: center;
+    padding: 0;
+    touch-action: manipulation;
+  }
+  .key.wide { flex-grow: 1.6; max-width: 72px; font-size: 0.8rem; }
+  .key.accent { background: var(--key-accent); max-width: 52px; }
+  .key[data-state] { color: var(--on-color); }
+  .key[data-state="correct"] { background: var(--blue); }
+  .key[data-state="present"] { background: var(--amber); }
+  .key[data-state="absent"] { background: var(--grey); }
+  .key svg { width: 22px; height: 22px; }
+  .krow.spacer::before, .krow.spacer::after { content: ""; flex: 0.5 1 0; max-width: 23px; }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 72px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 10;
+    max-width: 90vw;
+    text-align: center;
+  }
+  #toast.show { opacity: 1; }
+
+  /* Dialogs */
+  dialog {
+    border: 0;
+    border-radius: 14px;
+    padding: 24px 22px 22px;
+    width: min(420px, 92vw);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 20px 60px rgba(10, 20, 40, 0.35);
+  }
+  dialog::backdrop { background: rgba(15, 26, 43, 0.55); }
+  dialog h2 { font-family: var(--display); font-weight: 800; font-size: 1.5rem; margin: 0 0 12px; letter-spacing: -0.01em; }
+  dialog h3 { font-family: var(--display); font-weight: 600; font-size: 1.05rem; margin: 20px 0 8px; }
+  dialog p { line-height: 1.5; margin: 0 0 10px; }
+  .close {
+    position: absolute; top: 10px; right: 10px;
+  }
+  .example { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+  .example .tile { width: 38px; height: 38px; font-size: 1.2rem; flex: none; }
+  .example p { margin: 0; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 4px; }
+  .stats b { display: block; font-family: var(--display); font-size: 2rem; font-weight: 800; line-height: 1.1; }
+  .stats span { font-size: 0.8rem; color: var(--muted); }
+  .dist { display: grid; gap: 4px; }
+  .dist-row { display: grid; grid-template-columns: 14px 1fr; align-items: center; gap: 8px; font-size: 0.9rem; }
+  .bar {
+    background: var(--grey); color: var(--on-color);
+    min-width: 26px; padding: 2px 8px; border-radius: 3px;
+    text-align: right; font-weight: 600;
+  }
+  .bar.today { background: var(--blue); }
+  .footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 22px; }
+  .countdown b { display: block; font-family: var(--display); font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .countdown span { font-size: 0.85rem; color: var(--muted); }
+  .share {
+    border: 0; border-radius: 999px;
+    background: var(--blue); color: #fff;
+    padding: 12px 22px; font-weight: 600; font-size: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .share svg { width: 18px; height: 18px; }
+  .share[hidden] { display: none; }
+  .note { font-size: 0.85rem; color: var(--muted); }
+  .note a { color: inherit; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="icon-btn" id="helpBtn" aria-label="Hoe wurket it?">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.4-2.7 4"/><circle cx="12" cy="17.6" r="0.4" fill="currentColor"/></svg>
+  </button>
+  <h1>
+    <!-- Pompeblêd: shape from the Frisian flag (P.H. Wagemakers & Joh. Koopmans, 1954), public domain via Wikimedia Commons -->
+    <svg viewBox="-13.5 -16.5 30 30" aria-hidden="true"><path d="M0,12A16.143,16.143 0 0,1 -14,-4A7,8 0 0,1 -7,-12A6,8 0 0,1 -1,-5A1,1 0 1,0 1,-5A6,8 0 0,1 7,-12A7,8 0 0,1 14,-4A16.143,16.143 0 0,1 0,12z" fill="var(--red)" transform="rotate(34.695)"/></svg>
+    Fryskle
+  </h1>
+  <button class="icon-btn" id="statsBtn" aria-label="Statistyk">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V12M12 20V5M19 20v-9"/></svg>
+  </button>
+</header>
+<div class="flagstrip" aria-hidden="true"></div>
+<nav class="modes" id="modes" aria-label="Wurdlingte"></nav>
+
+<main>
+  <div id="board" aria-label="Spulbord"></div>
+  <div>
+    <div class="tools" id="tools">
+      <button type="button" id="inspireBtn">✨ Ynspiraasje</button>
+      <button type="button" id="hintBtn">💡 Hint</button>
+      <button type="button" id="finderBtn">🔎 Wurdsiker</button>
+    </div>
+    <div class="hintline" id="hintLine" aria-live="polite"></div>
+  </div>
+  <div id="keyboard" aria-label="Toetseboerd"></div>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="helpDlg" aria-labelledby="helpTitle">
+  <button class="icon-btn close" data-close aria-label="Slute">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <h2 id="helpTitle">Hoe wurket it?</h2>
+  <p>Rie it wurd fan hjoed yn seis besykjen. Elk besykjen moat in wurd fan <span id="helpLen">fiif</span> letters wêze.</p>
+  <div class="example"><div class="tile" data-state="correct">f</div><p>Blau: de letter stiet op it goede plak.</p></div>
+  <div class="example"><div class="tile" data-state="present">r</div><p>Giel: de letter komt yn it wurd foar, mar op in oar plak.</p></div>
+  <div class="example"><div class="tile" data-state="absent">e</div><p>Griis: de letter komt net yn it wurd foar.</p></div>
+  <p>Fêstrûn? <b>Ynspiraasje</b> jout goede wurden om mei te begjinnen, <b>Hint</b> lit ien letter sjen (ien per dei, fergees) en de <b>Wurdsiker</b> fertelt hoefolle wurden der noch passe.</p>
+  <p class="note">Tekens hoechst net te typen: typ <i>fugel</i> en it wurdt <i>fûgel</i>. Alle dagen in nij wurd, mei fjouwer, fiif, seis of sân letters: kies boppe-oan.</p>
+  <h3>Oer Fryskle</h3>
+  <p>Fryskle is in fergees Frysk wurdspul: rie it wurd fan 'e dei yn seis besykjen. Mei wurden fan fjouwer, fiif, seis of sân letters út de offisjele Foarkarswurdlist.</p>
+  <p lang="nl">Een gratis Fries woordspel: raad elke dag het Friese woord.</p>
+  <p class="note">© 2026 iappyx (MIT), <a href="https://github.com/iappyx/fryskle" target="_blank" rel="noopener">GitHub</a>. Wurden út de Foarkarswurdlist (ferzje 20160722), © 2016 Fryske Akademy, <a href="wordlist/gpl.txt">GNU GPL v3</a>.</p>
+</dialog>
+
+<dialog id="statsDlg" aria-labelledby="statsTitle">
+  <button class="icon-btn close" data-close aria-label="Slute">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <h2 id="statsTitle">Statistyk</h2>
+  <div class="stats" id="statsNums"></div>
+  <h3>Oantal besykjen</h3>
+  <div class="dist" id="dist"></div>
+  <div class="footer">
+    <div class="countdown" id="countdownBox"><span>Folgjende wurd oer</span><b id="countdown">--:--:--</b></div>
+    <button class="share" id="shareBtn" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>
+      Diele
+    </button>
+  </div>
+</dialog>
+
+<script src="words.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  // The word's meaning in the Fryske Akademy's online dictionaries (frysker.nl)
+  function meaningUrl(w) {
+    return `https://frysker.nl/sykje/?sykje=${encodeURIComponent(w)}&taal=fry&opsje=wurd`;
+  }
+
+  // All interface text in one place, so a native speaker can check and adjust it easily.
+  const T = {
+    tooShort: 'Te min letters',
+    notInList: 'Net yn de wurdlist',
+    win: ['Kin net better!', 'Hertstikke knap!', 'Tige goed!', 'Moai sa!', 'Dat wie it!', "Op 't nipperke!"],   // after 1 … 6 tries
+    lose: (w) => `It wurd wie: ${w.toUpperCase()}`,
+    copied: 'Kopiearre',
+    copyFailed: 'Kopiearjen slagge net',
+    noWords: 'Gjin wurden fûn. Kontrolearje words.js.',
+    played: 'Spile',
+    winPct: 'Wûn %',
+    streak: 'Rige',
+    maxStreak: 'Langste rige',
+    enter: 'Ynfiere',
+    backspace: 'Wiskje',
+    number: { 4: 'fjouwer', 5: 'fiif', 6: 'seis', 7: 'sân' },
+    inspire: (ws) => `Besykje ris: ${ws.join(' · ')}`,
+    hint: (i, ch) => `De ${i + 1}e letter is <b>${ch}</b>`,
+    hintAll: 'Alle letters steane al op it goede plak',
+    answer: (w) => `It wurd wie: <b>${w}</b> · <a href="${meaningUrl(w)}" target="_blank" rel="noopener">Wat betsjut it?</a>`,
+    fits: (n) => (n === 1 ? 'Der past noch 1 wurd' : `Der passe noch ${n} wurden`),
+    mode: (n) => `${n} letters`,
+  };
+
+  const CFG = Object.assign({ start: '2026-09-26', tz: 'Europe/Amsterdam' }, window.FRYSKLE_CONFIG || {});
+
+  // ---------- Mode: 4, 5, 6 or 7 letters (5 is the default). From the link (#6), else the last one played ----------
+  const MODES = window.FRYSKLE_MODES || {};
+  const LENGTHS = Object.keys(MODES).map(Number).sort((a, b) => a - b);
+  const pick = (n) => (LENGTHS.includes(n) ? n : null);
+  const savedMode = (() => { try { return +localStorage.getItem('fryskle-mode'); } catch { return 0; } })();
+  const WORD_LEN = pick(+location.hash.slice(1)) || pick(savedMode) || pick(5) || LENGTHS[0] || 5;
+  const MODE = MODES[WORD_LEN] || { answers: [], guesses: [], strict: false };
+  CFG.strict = MODE.strict;
+  try { localStorage.setItem('fryskle-mode', WORD_LEN); } catch { /* ignore */ }
+  document.documentElement.style.setProperty('--cols', WORD_LEN);
+  // 5 letters keeps the original storage names, so existing progress and stats stay
+  const KEY = (name) => (WORD_LEN === 5 ? `fryskle-${name}` : `fryskle-${WORD_LEN}-${name}`);
+  const MAX_TRIES = 6;
+  const REVEAL_MS = 300;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const norm = (s) => String(s).normalize('NFC').toLowerCase().trim();
+  const chars = (s) => Array.from(s);
+  const ALLOWED = new Set(chars('abcdefghijklmnopqrstuvwxyzâêéôûú'));
+  // Accents are forgiven: a letter with an accent counts as its plain letter
+  const FOLD = { 'â': 'a', 'ê': 'e', 'é': 'e', 'ô': 'o', 'û': 'u', 'ú': 'u' };
+  const base = (ch) => FOLD[ch] || ch;
+  const fold = (w) => chars(w).map(base).join('');
+
+  const ANSWERS = MODE.answers.map(norm).filter((w) => chars(w).length === WORD_LEN);
+  const GUESSES = new Set([...MODE.guesses.map(norm), ...ANSWERS]);
+  const BY_FOLD = new Map();   // word without accents -> the real words it can mean
+  GUESSES.forEach((w) => { const k = fold(w); if (!BY_FOLD.has(k)) BY_FOLD.set(k, []); BY_FOLD.get(k).push(w); });
+
+  // ---------- Date: everyone gets the same word, switching at midnight Dutch time ----------
+  function nowParts() {
+    const f = new Intl.DateTimeFormat('en-CA', {
+      timeZone: CFG.tz, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+    });
+    const p = {};
+    for (const x of f.formatToParts(new Date())) p[x.type] = x.value;
+    return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute, s: +p.second };
+  }
+  function dayNumber() {
+    const t = nowParts();
+    const [sy, sm, sd] = CFG.start.split('-').map(Number);
+    return Math.round((Date.UTC(t.y, t.m - 1, t.d) - Date.UTC(sy, sm - 1, sd)) / 86400000) + 1;
+  }
+  function secondsToMidnight() {
+    const t = nowParts();
+    return 86400 - (t.h * 3600 + t.mi * 60 + t.s);
+  }
+
+  const DAY = dayNumber();
+  const ANSWER = ANSWERS.length
+    ? ANSWERS[(((DAY - 1) % ANSWERS.length) + ANSWERS.length) % ANSWERS.length]
+    : null;
+
+  // ---------- Storage (fails gracefully, e.g. in private mode) ----------
+  const store = {
+    get(key, fallback) {
+      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+      catch { return fallback; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
+    },
+  };
+
+  let state = store.get(KEY('state'), null);
+  if (!state || state.day !== DAY) state = { day: DAY, guesses: [], status: 'playing' };
+  let stats = store.get(KEY('stats'), {
+    played: 0, wins: 0, streak: 0, maxStreak: 0, dist: [0, 0, 0, 0, 0, 0], lastWonDay: null,
+  });
+  let current = [];
+  let locked = false;
+
+  // ---------- Scoring (handles repeated letters correctly) ----------
+  function score(guess, answer) {
+    const g = chars(fold(guess)), a = chars(fold(answer));   // accents don't matter
+    const res = Array(WORD_LEN).fill('absent');
+    const remaining = {};
+    for (let i = 0; i < WORD_LEN; i++) {
+      if (g[i] === a[i]) res[i] = 'correct';
+      else remaining[a[i]] = (remaining[a[i]] || 0) + 1;
+    }
+    for (let i = 0; i < WORD_LEN; i++) {
+      if (res[i] !== 'correct' && remaining[g[i]] > 0) {
+        res[i] = 'present';
+        remaining[g[i]]--;
+      }
+    }
+    return res;
+  }
+
+  // ---------- Mode switcher ----------
+  const modesEl = document.getElementById('modes');
+  if (LENGTHS.length < 2) modesEl.hidden = true;
+  LENGTHS.forEach((n) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = T.mode(n);
+    b.setAttribute('aria-pressed', n === WORD_LEN);
+    b.addEventListener('click', () => {
+      if (n === WORD_LEN) return;
+      history.replaceState(null, '', '#' + n);
+      location.reload();
+    });
+    modesEl.appendChild(b);
+  });
+  window.addEventListener('hashchange', () => location.reload());
+  document.getElementById('helpLen').textContent = T.number[WORD_LEN] || WORD_LEN;
+  document.getElementById('statsTitle').textContent = `Statistyk · ${T.mode(WORD_LEN)}`;
+
+  // ---------- Board ----------
+  const board = document.getElementById('board');
+  const rows = [];
+  for (let r = 0; r < MAX_TRIES; r++) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.setAttribute('role', 'group');
+    row.setAttribute('aria-label', `Besykjen ${r + 1}`);
+    const tiles = [];
+    for (let c = 0; c < WORD_LEN; c++) {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      row.appendChild(tile);
+      tiles.push(tile);
+    }
+    board.appendChild(row);
+    rows.push({ el: row, tiles });
+  }
+
+  function paintRow(r, word, result) {
+    const letters = chars(word);
+    rows[r].tiles.forEach((tile, i) => {
+      tile.textContent = letters[i] || '';
+      tile.classList.remove('filled', 'flip');
+      if (result) tile.dataset.state = result[i];
+      else delete tile.dataset.state;
+    });
+  }
+
+  function paintCurrent() {
+    const r = state.guesses.length;
+    if (r >= MAX_TRIES) return;
+    rows[r].tiles.forEach((tile, i) => {
+      const had = tile.textContent;
+      tile.textContent = current[i] || '';
+      tile.classList.toggle('filled', !!current[i]);
+      if (current[i] && !had) { tile.style.animation = 'none'; void tile.offsetWidth; tile.style.animation = ''; }
+    });
+  }
+
+  // ---------- Keyboard ----------
+  const LAYOUT = [
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'back'],
+    ['â', 'ê', 'é', 'ô', 'û', 'ú'],
+  ];
+  const keyEls = {};
+  const kb = document.getElementById('keyboard');
+  LAYOUT.forEach((keys, ri) => {
+    const row = document.createElement('div');
+    row.className = 'krow' + (ri === 1 ? ' spacer' : '');
+    keys.forEach((k) => {
+      const b = document.createElement('button');
+      b.className = 'key';
+      b.type = 'button';
+      b.dataset.key = k;
+      if (k === 'enter') {
+        b.classList.add('wide');
+        b.setAttribute('aria-label', T.enter);
+        b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5v7a3 3 0 0 1-3 3H5"/><path d="M9 11l-4 4 4 4"/></svg>';
+      } else if (k === 'back') {
+        b.classList.add('wide');
+        b.setAttribute('aria-label', T.backspace);
+        b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M17 9l-5 6M12 9l5 6"/></svg>';
+      } else {
+        b.textContent = k;
+        if (ri === 3) b.classList.add('accent');
+        keyEls[k] = b;
+      }
+      row.appendChild(b);
+    });
+    kb.appendChild(row);
+  });
+
+  const RANK = { absent: 1, present: 2, correct: 3 };
+  function paintKeys(upTo = state.guesses.length) {
+    const best = {};
+    state.guesses.slice(0, upTo).forEach((g) => {
+      const res = score(g, ANSWER);
+      chars(g).forEach((ch, i) => {
+        const b = base(ch);
+        if (!best[b] || RANK[res[i]] > RANK[best[b]]) best[b] = res[i];
+      });
+    });
+    for (const [k, el] of Object.entries(keyEls)) {
+      if (best[base(k)]) el.dataset.state = best[base(k)];
+      else delete el.dataset.state;
+    }
+  }
+
+  kb.addEventListener('click', (e) => {
+    const b = e.target.closest('.key');
+    if (!b) return;
+    b.blur();
+    press(b.dataset.key);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (document.querySelector('dialog[open]')) return;
+    if (e.key === 'Enter') { e.preventDefault(); press('enter'); return; }
+    if (e.key === 'Backspace') { e.preventDefault(); press('back'); return; }
+    const k = norm(e.key);
+    if (chars(k).length === 1 && ALLOWED.has(k)) press(k);
+  });
+
+  // ---------- Game flow ----------
+  function press(k) {
+    if (locked || state.status !== 'playing' || !ANSWER) return;
+    if (k === 'enter') return submit();
+    if (k === 'back') { current.pop(); return paintCurrent(); }
+    if (current.length < WORD_LEN && ALLOWED.has(k)) { current.push(k); paintCurrent(); }
+  }
+
+  function shake() {
+    const row = rows[state.guesses.length].el;
+    row.classList.remove('shake');
+    void row.offsetWidth;
+    row.classList.add('shake');
+  }
+
+  // The word the player means: today's word if it matches apart from accents,
+  // else the word as typed, else a real word with the same letters plus accents.
+  function resolve(typed) {
+    const k = fold(typed);
+    if (k === fold(ANSWER)) return ANSWER;
+    if (GUESSES.has(typed)) return typed;
+    const alts = BY_FOLD.get(k);
+    return alts ? alts[0] : null;
+  }
+
+  function submit() {
+    if (current.length < WORD_LEN) { toast(T.tooShort); return shake(); }
+    const word = resolve(current.join('')) || (CFG.strict ? null : current.join(''));
+    if (!word) { toast(T.notInList); return shake(); }
+
+    const r = state.guesses.length;
+    const result = score(word, ANSWER);
+    state.guesses.push(word);
+    current = [];
+    if (word === ANSWER) state.status = 'won';
+    else if (state.guesses.length >= MAX_TRIES) state.status = 'lost';
+    store.set(KEY('state'), state);
+    if (state.status !== 'playing') recordResult();
+
+    locked = true;
+    reveal(r, word, result, () => {
+      locked = false;
+      paintKeys();
+      updateTools();
+      if (state.status === 'won') {
+        toast(T.win[Math.min(r, T.win.length - 1)]);
+        rows[r].el.classList.add('win');
+        setTimeout(openStats, 1600);
+      } else if (state.status === 'lost') {
+        toast(T.lose(ANSWER), 3000);
+        setTimeout(openStats, 2200);
+      }
+    });
+  }
+
+  // ---------- Help tools (no penalty; the hint is one per day per mode) ----------
+  // Starter words: words whose different letters are common in this mode's word list.
+  const STARTERS = (() => {
+    const freq = {};
+    GUESSES.forEach((w) => new Set(chars(w)).forEach((ch) => { freq[ch] = (freq[ch] || 0) + 1; }));
+    const value = (w) => { const u = new Set(chars(w)); return u.size < WORD_LEN ? 0 : [...u].reduce((t, ch) => t + freq[ch], 0); };
+    return [...GUESSES].filter((w) => w !== ANSWER).sort((a, b) => value(b) - value(a)).slice(0, 150);
+  })();
+
+  // A word still fits if it would have given exactly the same colours for every guess so far.
+  function fitting() {
+    const results = state.guesses.map((g) => [g, score(g, ANSWER).join()]);
+    return [...GUESSES].filter((w) =>
+      results.every(([g, res]) => score(g, w).join() === res) &&
+      (!state.hint || base(chars(w)[state.hint.i]) === base(state.hint.ch))).length;
+  }
+
+  function showHint() {
+    document.getElementById('hintLine').innerHTML = state.hint ? T.hint(state.hint.i, state.hint.ch) : '';
+    document.getElementById('hintBtn').disabled = !!state.hint;
+  }
+
+  function updateTools() {
+    const done = state.status !== 'playing';
+    document.getElementById('tools').hidden = done;
+    showHint();
+    if (done) document.getElementById('hintLine').innerHTML = T.answer(ANSWER);
+  }
+
+  document.getElementById('inspireBtn').addEventListener('click', () => {
+    const pick = [];
+    while (pick.length < Math.min(3, STARTERS.length)) {
+      const w = STARTERS[Math.floor(Math.random() * STARTERS.length)];
+      if (!pick.includes(w)) pick.push(w);
+    }
+    toast(T.inspire(pick), 3500);
+  });
+
+  document.getElementById('hintBtn').addEventListener('click', () => {
+    if (state.hint || state.status !== 'playing') return;
+    const a = chars(ANSWER);
+    const known = new Set();
+    state.guesses.forEach((g) => score(g, ANSWER).forEach((r, i) => { if (r === 'correct') known.add(i); }));
+    const i = a.findIndex((_, j) => !known.has(j));
+    if (i < 0) { toast(T.hintAll); return; }
+    state.hint = { i, ch: a[i] };
+    store.set(KEY('state'), state);
+    showHint();
+  });
+
+  document.getElementById('finderBtn').addEventListener('click', () => toast(T.fits(fitting()), 2500));
+
+  function reveal(r, word, result, done) {
+    if (reduceMotion) { paintRow(r, word, result); return done(); }
+    const letters = chars(word);
+    rows[r].tiles.forEach((tile, i) => {
+      setTimeout(() => {
+        tile.classList.remove('filled');
+        tile.classList.add('flip');
+        setTimeout(() => {
+          tile.textContent = letters[i];
+          tile.dataset.state = result[i];
+        }, 250);
+      }, i * REVEAL_MS);
+    });
+    setTimeout(done, (WORD_LEN - 1) * REVEAL_MS + 520);
+  }
+
+  function recordResult() {
+    stats.played++;
+    if (state.status === 'won') {
+      stats.wins++;
+      stats.dist[state.guesses.length - 1]++;
+      stats.streak = stats.lastWonDay === DAY - 1 ? stats.streak + 1 : 1;
+      stats.lastWonDay = DAY;
+      stats.maxStreak = Math.max(stats.maxStreak, stats.streak);
+    } else {
+      stats.streak = 0;
+    }
+    store.set(KEY('stats'), stats);
+  }
+
+  // A streak only counts if the last win was today or yesterday.
+  function currentStreak() {
+    return stats.lastWonDay === DAY || stats.lastWonDay === DAY - 1 ? stats.streak : 0;
+  }
+
+  // ---------- Toast ----------
+  const toastEl = document.getElementById('toast');
+  let toastTimer;
+  function toast(msg, ms = 1400) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), ms);
+  }
+
+  // ---------- Dialogs ----------
+  const helpDlg = document.getElementById('helpDlg');
+  const statsDlg = document.getElementById('statsDlg');
+  document.getElementById('helpBtn').addEventListener('click', () => helpDlg.showModal());
+  document.getElementById('statsBtn').addEventListener('click', openStats);
+  document.querySelectorAll('[data-close]').forEach((b) =>
+    b.addEventListener('click', () => b.closest('dialog').close()));
+  document.querySelectorAll('dialog').forEach((d) =>
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
+
+  function openStats() {
+    const pct = stats.played ? Math.round((stats.wins / stats.played) * 100) : 0;
+    document.getElementById('statsNums').innerHTML = [
+      [stats.played, T.played], [pct, T.winPct], [currentStreak(), T.streak], [stats.maxStreak, T.maxStreak],
+    ].map(([n, label]) => `<div><b>${n}</b><span>${label}</span></div>`).join('');
+
+    const max = Math.max(1, ...stats.dist);
+    const todayRow = state.status === 'won' ? state.guesses.length - 1 : -1;
+    document.getElementById('dist').innerHTML = stats.dist.map((n, i) => `
+      <div class="dist-row"><span>${i + 1}</span>
+        <div class="bar${i === todayRow ? ' today' : ''}" style="width:${Math.max(8, (n / max) * 100)}%">${n}</div>
+      </div>`).join('');
+
+    const finished = state.status !== 'playing';
+    document.getElementById('shareBtn').hidden = !finished;
+    document.getElementById('countdownBox').style.visibility = finished ? 'visible' : 'hidden';
+    if (!statsDlg.open) statsDlg.showModal();
+  }
+
+  // ---------- Countdown & day rollover ----------
+  const pad = (n) => String(n).padStart(2, '0');
+  setInterval(() => {
+    if (dayNumber() !== DAY) { location.reload(); return; }
+    const s = secondsToMidnight();
+    document.getElementById('countdown').textContent =
+      `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+  }, 1000);
+
+  // ---------- Share ----------
+  const EMOJI = { correct: '🟦', present: '🟨', absent: '⬜' };
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const tries = state.status === 'won' ? state.guesses.length : 'X';
+    const grid = state.guesses.map((g) => score(g, ANSWER).map((s) => EMOJI[s]).join('')).join('\n');
+    const url = location.origin + location.pathname + (WORD_LEN === 5 ? '' : '#' + WORD_LEN);
+    const name = WORD_LEN === 5 ? 'Fryskle' : `Fryskle ${T.mode(WORD_LEN)}`;
+    const text = `${name} ${DAY} ${tries}/${MAX_TRIES}\n\n${grid}\n\n${url}`;
+
+    const touch = window.matchMedia('(pointer: coarse)').matches;
+    if (touch && navigator.share) {
+      try { await navigator.share({ text }); return; } catch (err) { if (err.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(T.copied);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      toast(ok ? T.copied : T.copyFailed);
+    }
+  });
+
+  // ---------- Start ----------
+  if (!ANSWER) { toast(T.noWords, 10000); return; }
+  state.guesses.forEach((g, r) => paintRow(r, g, score(g, ANSWER)));
+  paintKeys();
+  paintCurrent();
+  updateTools();
+  if (!store.get('fryskle-seen-help', false)) {
+    store.set('fryskle-seen-help', true);
+    helpDlg.showModal();
+  } else if (state.status !== 'playing') {
+    setTimeout(openStats, 400);
+  }
+})();
+</script>
+</body>
+</html>

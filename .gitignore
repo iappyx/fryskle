@@ -1,0 +1,4 @@
+# macOS Finder files
+.DS_Store
+# Python cache (if the build scripts are ever imported)
+__pycache__/
