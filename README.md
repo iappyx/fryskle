@@ -71,10 +71,6 @@ You can also test locally by opening `index.html` directly in a browser.
 - When the game is over, the day's word stays visible below the board, with a link *Wat betsjut it?* that looks it up on [frysker.nl](https://frysker.nl), the Fryske Akademy's online dictionaries. Inflected forms lead to their base word there (*daald* → *dale*).
 - Colors are blue (right place), amber (in the word) and grey (not in the word). Blue and amber are easy to tell apart for most people with color blindness. Shared results use 🟦🟨⬜.
 
-## Check the Frisian
-
-All interface text is in the `T` object at the top of the script in `index.html`, plus the help dialog in the HTML. Please have a native speaker check it before launch.
-
 ## License
 
 Made by **iappyx**.
