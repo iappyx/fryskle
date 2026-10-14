@@ -861,11 +861,11 @@
   paintKeys();
   paintCurrent();
   updateTools();
+  // Statistics open once when a word is finished, or via the button; not again on every
+  // visit or mode switch (the day's word stays visible below the board instead).
   if (!store.get('fryskle-seen-help', false)) {
     store.set('fryskle-seen-help', true);
     helpDlg.showModal();
-  } else if (state.status !== 'playing') {
-    setTimeout(openStats, 400);
   }
 })();
 </script>
