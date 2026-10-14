@@ -194,6 +194,8 @@
     user-select: none;
   }
   .tile.filled { border-color: var(--muted); animation: pop 0.1s; }
+  /* Ghost letter: a letter already found (or the hint), shown faintly in an empty tile of the active row */
+  .tile[data-ghost]:empty::after { content: attr(data-ghost); opacity: 0.3; }
   .tile[data-state] { border-color: transparent; color: var(--on-color); }
   .tile[data-state="correct"] { background: var(--blue); }
   .tile[data-state="present"] { background: var(--amber); }
@@ -539,18 +541,29 @@
     const letters = chars(word);
     rows[r].tiles.forEach((tile, i) => {
       tile.textContent = letters[i] || '';
+      delete tile.dataset.ghost;
       tile.classList.remove('filled', 'flip');
       if (result) tile.dataset.state = result[i];
       else delete tile.dataset.state;
     });
   }
 
+  // Letters already known in place: correct (blue) in an earlier attempt, or the hint once asked for.
+  function ghosts() {
+    const a = chars(ANSWER), g = [];
+    state.guesses.forEach((w) => score(w, ANSWER).forEach((res, i) => { if (res === 'correct') g[i] = a[i]; }));
+    if (state.hint) g[state.hint.i] = a[state.hint.i];
+    return g;
+  }
+
   function paintCurrent() {
     const r = state.guesses.length;
     if (r >= MAX_TRIES) return;
+    const ghost = state.status === 'playing' ? ghosts() : [];
     rows[r].tiles.forEach((tile, i) => {
       const had = tile.textContent;
       tile.textContent = current[i] || '';
+      if (ghost[i]) tile.dataset.ghost = ghost[i]; else delete tile.dataset.ghost;
       tile.classList.toggle('filled', !!current[i]);
       if (current[i] && !had) { tile.style.animation = 'none'; void tile.offsetWidth; tile.style.animation = ''; }
     });
@@ -667,6 +680,7 @@
       locked = false;
       paintKeys();
       updateTools();
+      paintCurrent();   // ghost letters in the next row
       if (state.status === 'won') {
         toast(T.win[Math.min(r, T.win.length - 1)]);
         rows[r].el.classList.add('win');
@@ -726,6 +740,7 @@
     state.hint = { i, ch: a[i] };
     store.set(KEY('state'), state);
     showHint();
+    paintCurrent();   // the hint letter appears as a ghost
   });
 
   document.getElementById('finderBtn').addEventListener('click', () => toast(T.fits(fitting()), 2500));

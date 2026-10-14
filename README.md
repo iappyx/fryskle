@@ -68,6 +68,7 @@ You can also test locally by opening `index.html` directly in a browser.
   - **Hint** reveals one letter that isn't in place yet. One per day per mode; it stays visible after a reload.
   - **Wurdsiker** only tells how many words still fit all the colours so far (and the hint), without showing them.
 - Accents are forgiven. Players can type *fugel* and the game makes it *fûgel*: a typed word is matched to the day's word or another real word that differs only in accents, and shown with the right accents. Colours ignore accents too, so an *a* counts for an *â*. The accented letters (â, ê, é, ô, û, ú) still have their own keyboard row for anyone who wants them. Physical keyboards work too, including dead keys.
+- Ghost letters: letters already found in place (blue in an earlier attempt), and the hint letter once asked for, show faintly in the row you're typing in. They disappear under the letters you type.
 - When the game is over, the day's word stays visible below the board, with a link *Wat betsjut it?* that looks it up on [frysker.nl](https://frysker.nl), the Fryske Akademy's online dictionaries. Inflected forms lead to their base word there (*daald* → *dale*).
 - Colors are blue (right place), amber (in the word) and grey (not in the word). Blue and amber are easy to tell apart for most people with color blindness. Shared results use 🟦🟨⬜.
 
